@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INDIA Medical</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <style>
+        /* Custom CSS for the fixed "Order Now" button */
+        .order-now-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #065F46; /* A nice blue, you can adjust */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 9999px; /* Makes it fully rounded */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+            text-decoration: none; /* Remove underline for links */
+        }
+
+        .order-now-btn:hover {
+            background-color: #1D4ED8; /* Darker blue on hover */
+        }
+
+        /* Styles for the Call to Action button */
+        .call-to-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #047857; /* A teal green */
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 2rem auto;
+            max-width: fit-content;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .call-to-action:hover {
+            background-color: #065F46; /* Darker teal on hover */
+            transform: translateY(-2px);
+        }
+
+        .call-to-action .icon-call {
+            margin-right: 0.5rem;
+        }
+
+        /* --- Flickity Carousel Custom Styles --- */
+        .main-carousel {
+            width: 100%;
+            /* Maintain a fixed height for the carousel to ensure full image cover */
+            height: 400px; /* Adjust as needed for your design */
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+            background-color: #f0fdf4; /* Light green background */
+            overflow: hidden; /* Ensure content doesn't spill out */
+            position: relative; /* Needed for absolute positioning of text overlay */
+        }
+
+        .carousel-cell {
+            width: 100%; /* Each cell takes full width of the carousel */
+            height: 100%; /* Important: Make cell fill carousel height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* For text overlay */
+            padding: 0; /* Remove padding to allow image to fill */
+        }
+
+        .carousel-cell img {
+            width: 100%;
+            height: 100%; /* Image fills the cell */
+            object-fit: cover; /* This is key: image covers the area, cropping if needed */
+            border-radius: 0.75rem; /* Apply border radius here for consistent look */
+            position: absolute; /* Position absolutely to fill container */
+            top: 0;
+            left: 0;
+            z-index: 1; /* Place image behind text overlay */
+        }
+
+        .carousel-cell .slide-text {
+            position: relative; /* Position text above the image */
+            z-index: 2; /* Place text above image */
+            font-size: 2.5rem; /* Larger text for prominence */
+            font-weight: 800; /* Bolder text */
+            color: white; /* White text for contrast on image */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); /* Stronger shadow for readability */
+            padding: 1rem 1.5rem; /* Add some padding around text */
+            background-color: rgba(17, 94, 89, 0.5); /* Semi-transparent background for text */
+            border-radius: 0.5rem;
+            max-width: 90%; /* Limit text width */
+            line-height: 1.2;
+        }
+
+        /* Flickity navigation and pagination styles (customizing defaults) */
+        .flickity-prev-next-button {
+            background: rgba(17, 94, 89, 0.7);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            z-index: 3; /* Ensure buttons are above images and text */
+        }
+        .flickity-prev-next-button:hover {
+            background: #115E59;
+        }
+        .flickity-prev-next-button .flickity-button-icon {
+            fill: white; /* Arrow color */
+        }
+
+        .flickity-page-dots {
+            bottom: 10px; /* Position dots slightly higher */
+            z-index: 3; /* Ensure dots are above images and text */
+        }
+        .flickity-page-dots .dot {
+            background: #a7f3d0; /* Inactive dot color */
+            opacity: 1; /* Ensure full visibility */
+            width: 10px;
+            height: 10px;
+            margin: 0 4px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .flickity-page-dots .dot.is-selected {
+            background: #047857; /* Active dot color */
+            transform: scale(1.2);
+        }
+
+
+        /* --- About Pharmacy Section --- */
+        .about-pharmacy {
+            background-color: #e0f2fe; /* Light blue background */
+            padding: 3rem 1.5rem;
+            text-align: center;
+            border-radius: 0.75rem;
+            margin: 2rem auto;
+            max-width: 900px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .about-pharmacy h2 {
+            font-size: 2.5rem;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .about-pharmacy p {
+            font-size: 1.125rem;
+            color: #4a5568;
+            line-height: 1.75;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- Services Section (General Styling) --- */
+        .services-section {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            background-color: #f7fee7; /* Very light green */
+            margin: 2rem auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .services-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #115E59;
+            margin-bottom: 1rem;
+        }
+
+        .services-section p {
+            font-size: 1.125rem;
+            color: #4a5568;
+        }
+
+        /* --- Cards Container for Services --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1.5rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            background-color: #ecfdf5; /* Light green on hover */
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            color: #047857;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            color: #065F46; /* Darker green on hover */
+        }
+
+        .card-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        /* --- Reviews Section --- */
+        .reviews-section {
+            background-color: #f0f9ff; /* Lightest blue */
+            padding: 3rem 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .reviews-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 2rem;
+        }
+
+        .review-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: left;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            background-color: #eff6ff; /* Light blue on hover */
+        }
+
+        .review-text {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            flex-grow: 1; /* Allows text to take up available space */
+        }
+
+        .reviewer-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d3748;
+            align-self: flex-end; /* Pushes the name to the bottom-right */
+        }
+
+        /* --- Responsive adjustments for smaller screens --- */
+        @media (max-width: 768px) {
+            .order-now-btn {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+
+            .main-carousel {
+                height: 300px; /* Adjust height for tablets */
+            }
+            .carousel-cell .slide-text {
+                font-size: 1.8rem;
+                padding: 0.8rem 1rem;
+            }
+
+            .about-pharmacy h2,
+            .services-section h2,
+            .reviews-section h2 {
+                font-size: 2rem;
+            }
+
+            .about-pharmacy p,
+            .services-section p {
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .card-icon {
+                font-size: 3rem;
+            }
+
+            .card-text {
+                font-size: 1.1rem;
+            }
+
+            /* Mobile menu specific styles */
+            #mobile-menu {
+                width: 100%;
+                text-align: center;
+                background-color: #115E59;
+                padding: 1rem 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                position: absolute;
+                left: 0;
+                right: 0;
+                z-index: 999;
+            }
+
+            #mobile-menu a {
+                display: block;
+                padding: 0.5rem 1rem;
+                margin: 0.5rem 0;
+                color: white;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-carousel {
+                height: 220px; /* Adjust height for mobile */
+            }
+            .carousel-cell .slide-text {
+                font-size: 1.4rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .flickity-prev-next-button {
+                width: 30px;
+                height: 30px;
+            }
+
+            .about-pharmacy h2,
+            .services-section h2,
+            .reviews-section h2 {
+                font-size: 1.75rem;
+            }
+
+            .about-pharmacy p,
+            .services-section p {
+                font-size: 0.9rem;
+            }
+
+            .cards-container,
+            .review-cards {
+                grid-template-columns: 1fr; /* Stack cards on very small screens */
+                padding: 0 1rem 2rem;
+            }
+
+            .card, .review-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header style="background-color: #115E59;" class="text-white py-4 px-4 md:px-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-3xl font-bold">INDIA<span class="text-green-500">MEDICAL</span></div>
+            </div>
+            <nav class="hidden md:flex space-x-4">
+                <div class="flex flex-col items-center md:items-start space-y-4">
+                <div class="flex space-x-4">
+                    <a href="#" class="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-all shadow-md" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-whatsapp"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 8h.01"/><path d="M17.5 12.5c.2.9-.1 1.9-.9 2.4l-2.5 1.5c-1 .6-2.3-.2-2.8-1.3L7 10c-.6-1-.2-2.3.4-2.8l1.5-2.5c.5-.8 1.5-1.1 2.4-.9L17.5 12.5z"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 transition-all shadow-md" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-all shadow-md" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                </div>
+                </div>
+                <a href="#privacy-policy" class="text-gray-300 hover:text-white transition-all">Privacy Policy</a>
+                <a href="#disclaimer" class="text-gray-300 hover:text-white transition-all">Disclaimer</a>
+                <a href="#contact-us" class="text-gray-300 hover:text-white transition-all">Contact Us</a>
+            </nav>
+            <button id="mobile-menu-toggle" class="md:hidden p-2 bg-gray-700 rounded" aria-expanded="false" aria-controls="mobile-menu">
+                <span class="material-icons" id="menu-icon">menu</span>
+                <span class="material-icons hidden" id="close-icon">close</span>
+            </button>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden flex flex-col items-center mt-2">
+            <div class="flex flex-col items-center md:items-start space-y-4">
+                <h3 class="text-xl font-semibold mb-2">Connect With Us</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-all shadow-md" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-whatsapp"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 8h.01"/><path d="M17.5 12.5c.2.9-.1 1.9-.9 2.4l-2.5 1.5c-1 .6-2.3-.2-2.8-1.3L7 10c-.6-1-.2-2.3.4-2.8l1.5-2.5c.5-.8 1.5-1.1 2.4-.9L17.5 12.5z"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 transition-all shadow-md" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-all shadow-md" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <a href="#privacy-policy" class="text-gray-300 hover:text-white transition-all">Privacy Policy</a>
+            <a href="#disclaimer" class="text-gray-300 hover:text-white transition-all">Disclaimer</a>
+            <a href="#contact-us" class="text-gray-300 hover:text-white transition-all">Contact Us</a>
+        </div>
+    </header>
+
+    <button class="call-to-action" aria-label="Call or WhatsApp us to order" tabindex="0">
+        <span class="material-icons icon-call" aria-hidden="true">call</span>
+        Call or WhatsApp Us to Order
+    </button>
+
+    <section class="main-carousel" aria-label="Medical product carousel">
+        <div class="carousel-cell" aria-hidden="false">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f8e4fb9d-fbad-48f4-81e3-0f8daf211556.png" alt="Quality Medicines on shelves in modern pharmacy" />
+            <div class="slide-text">Trusted Quality Medicines</div>
+        </div>
+        <div class="carousel-cell" aria-hidden="true">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f2a6b927-faeb-4b51-9147-af7da692c8f1.png" alt="Expert pharmacist smiling in pharmacy" />
+            <div class="slide-text">Expert Pharmacists at Your Service</div>
+        </div>
+        <div class="carousel-cell" aria-hidden="true">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/65021d78-db41-4156-95d3-cea77e39fdc1.png" alt="Delivery person handling medical package" />
+            <div class="slide-text">Fast and Reliable Delivery</div>
+        </div>
+    </section>
+
+    <section class="about-pharmacy" aria-labelledby="about-pharmacy-heading">
+        <h2 id="about-pharmacy-heading">About INDIA Medical</h2>
+        <p>
+            At INDIA Medical, we are committed to providing safe, reliable, and affordable health solutions. From prescription medicines to everyday health essentials, our expert team ensures you receive personalized care and support. Trust us for your health - quality, convenience, and compassion all in one place.
+        </p>
+    </section>
+
+    <section class="services-section text-center py-8">
+        <h2 class="text-2xl font-bold mb-4">Our Services</h2>
+        <p class="mb-6">We offer a wide range of services to meet your health needs:</p>
+    </section>
+
+    <section class="cards-container" aria-label="Pharmacy services and features">
+        <article class="card" tabindex="0" aria-describedby="fast-service-desc">
+            <span class="material-icons card-icon" aria-hidden="true">local_shipping</span>
+            <p id="fast-service-desc" class="card-text">Fast Home Delivery</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="best-medicines-desc">
+            <span class="material-icons card-icon" aria-hidden="true">medication</span>
+            <p id="best-medicines-desc" class="card-text">Best Quality Medicines</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="expertadvice-desc">
+            <span class="material-icons card-icon" aria-hidden="true">support_agent</span>
+            <p id="expertadvice-desc" class="card-text">Expert Advice</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="easy-order-desc">
+            <span class="material-icons card-icon" aria-hidden="true">smartphone</span>
+            <p id="easy-order-desc" class="card-text">Easy Ordering</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="daycare-desc">
+            <span class="material-icons card-icon" aria-hidden="true">child_care</span>
+            <p id="daycare-desc" class="card-text">Daycare Services</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="lab-desc">
+            <span class="material-icons card-icon" aria-hidden="true">science</span>
+            <p id="lab-desc" class="card-text">Lab Services</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="offline-consultation-desc">
+            <span class="material-icons card-icon" aria-hidden="true">person</span>
+            <p id="offline-consultation-desc" class="card-text">Offline Consultation</p>
+        </article>
+        <article class="card" tabindex="0" aria-describedby="customer-support-desc">
+            <span class="material-icons card-icon" aria-hidden="true">headset_mic</span>
+            <p id="customer-support-desc" class="card-text">24/7 Customer Support</p>
+        </article>
+    </section>
+
+    <section class="reviews-section" aria-labelledby="happy-customers-heading">
+        <h2 id="happy-customers-heading">Happy Customers🤗</h2>
+        <div class="review-cards">
+            <div class="review-card" tabindex="0">
+                <p class="review-text">"Fast delivery and excellent medicine quality. Always my first choice!"</p>
+                <span class="reviewer-name">- Irfan.</span>
+            </div>
+            <div class="review-card" tabindex="0">
+                <p class="review-text">"The pharmacists here really know their stuff and were very helpful."</p>
+                <span class="reviewer-name">- Saniya.</span>
+            </div>
+            <div class="review-card" tabindex="0">
+                <p class="review-text">"I love how easy it is to order via WhatsApp. Quick and reliable."</p>
+                <span class="reviewer-name">- Zaid.</span>
+            </div>
+            <div class="review-card" tabindex="0">
+                <p class="review-text">"Great customer service and fantastic product range. Highly recommend!"</p>
+                <span class="reviewer-name">- Kaif.</span>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background-color: #115E59;" class="text-white py-8 px-4 md:px-8 mt-12 rounded-t-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0">
+            <div class="flex flex-col items-center md:items-start text-center md:text-left">
+                <div class="text-3xl font-bold mb-2">INDIA<span class="text-green-500">MEDICAL</span></div>
+                <p class="text-sm text-gray-400">© 2024 INDIA Medical. All rights reserved.</p>
+            </div>
+
+            <nav class="flex flex-col items-center md:items-start space-y-3">
+                <a href="#privacy-policy" class="text-gray-300 hover:text-white transition-all text-lg font-medium">Privacy Policy</a>
+                <a href="#disclaimer" class="text-gray-300 hover:text-white transition-all text-lg font-medium">Disclaimer</a>
+                <a href="#contact-us" class="text-gray-300 hover:text-white transition-all text-lg font-medium">Contact Us</a>
+            </nav>
+
+            <div class="flex flex-col items-center md:items-start space-y-4">
+                <h3 class="text-xl font-semibold mb-2">Connect With Us</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-all shadow-md" aria-label="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-whatsapp"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 8h.01"/><path d="M17.5 12.5c.2.9-.1 1.9-.9 2.4l-2.5 1.5c-1 .6-2.3-.2-2.8-1.3L7 10c-.6-1-.2-2.3.4-2.8l1.5-2.5c.5-.8 1.5-1.1 2.4-.9L17.5 12.5z"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 transition-all shadow-md" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="p-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition-all shadow-md" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    </a>
+                </div>
+                <button class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all shadow-md" aria-label="Location">
+                    <img src="./Logo/Location-50.png" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mr-2"><path d="M12 2v20M18 10H6"/><circle cx="12" cy="12" r="10" />
+                    Our Location
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-8 rounded-lg overflow-hidden shadow-lg">
+            <iframe
+                src="https://maps.google.com/maps?q=India%20Medical%20Gulbarga%20Karnataka%20India&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                class="w-full h-64 md:h-80 border-0"
+                aria-label="Map showing location of INDIA Medical in Gulbarga, Karnataka"
+                loading="lazy" allowfullscreen>
+                </iframe>
+
+        </div>
+    </footer>
+
+    <a href="tel:+91 9980543644" class="order-now-btn">
+        <span class="material-icons">call</span>
+        Order Now
+    </a>
+
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script>
+        // JavaScript for Mobile Menu functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            if (mobileMenuToggle && mobileMenu && menuIcon && closeIcon) {
+                mobileMenuToggle.addEventListener('click', (event) => {
+                    // Prevent the click from propagating to the document body immediately
+                    event.stopPropagation();
+
+                    const isMenuOpen = !mobileMenu.classList.contains('hidden'); // True if currently open
+
+                    mobileMenu.classList.toggle('hidden');
+                    menuIcon.classList.toggle('hidden'); // Toggle visibility of menu icon
+                    closeIcon.classList.toggle('hidden'); // Toggle visibility of close icon
+                    mobileMenuToggle.setAttribute('aria-expanded', !isMenuOpen); // Update ARIA attribute
+                });
+
+                // Close the mobile menu when clicking outside of it
+                document.addEventListener('click', (event) => {
+                    // If the menu is open AND the click target is NOT inside the menu AND NOT the toggle button
+                    if (!mobileMenu.classList.contains('hidden') &&
+                        !mobileMenu.contains(event.target) &&
+                        !mobileMenuToggle.contains(event.target)) {
+                        
+                        mobileMenu.classList.add('hidden'); // Hide the menu
+                        menuIcon.classList.remove('hidden'); // Show menu icon
+                        closeIcon.classList.add('hidden'); // Hide close icon
+                        mobileMenuToggle.setAttribute('aria-expanded', 'false'); // Update ARIA attribute
+                    }
+                });
+
+                // Optional: Close menu when a link inside it is clicked
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                            menuIcon.classList.remove('hidden');
+                            closeIcon.classList.add('hidden');
+                            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+
+            } else {
+                console.error("One or more mobile menu elements not found. Mobile menu functionality might be impaired.");
+            }
+        });
+
+        // Initialize Flickity
+        var flkty = new Flickity( '.main-carousel', {
+            // options
+            cellAlign: 'left',
+            contain: true,
+            wrapAround: true, // Loop carousel
+            autoPlay: 5000, // Autoplay every 5 seconds
+            pageDots: true, // Show pagination dots
+            prevNextButtons: true // Show navigation arrows
+        });
+    </script>
+</body>
+</html>
